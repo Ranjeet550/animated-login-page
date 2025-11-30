@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animated Login Page</title>
+    <title>Inventory Management System</title>
     <style>
         * {
             margin: 0;
@@ -13,6 +13,11 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+        }
+
+        /* Login Page Styles */
+        .login-page {
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -21,7 +26,6 @@
             overflow: hidden;
         }
 
-        /* Animated background particles */
         .particles {
             position: absolute;
             width: 100%;
@@ -41,19 +45,14 @@
                 transform: translateY(0) translateX(0) rotate(0deg);
                 opacity: 0;
             }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
             100% {
                 transform: translateY(-100vh) translateX(100px) rotate(360deg);
                 opacity: 0;
             }
         }
 
-        /* Login container */
         .login-container {
             position: relative;
             background: rgba(255, 255, 255, 0.95);
@@ -63,6 +62,7 @@
             width: 400px;
             animation: slideIn 0.8s ease-out;
             backdrop-filter: blur(10px);
+            z-index: 10;
         }
 
         @keyframes slideIn {
@@ -85,47 +85,16 @@
             color: #667eea;
             font-size: 32px;
             margin-bottom: 10px;
-            animation: fadeIn 1s ease-out 0.3s both;
         }
 
         .login-header p {
             color: #666;
             font-size: 14px;
-            animation: fadeIn 1s ease-out 0.5s both;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
         }
 
         .input-group {
             margin-bottom: 25px;
             position: relative;
-            animation: slideInLeft 0.6s ease-out both;
-        }
-
-        .input-group:nth-child(1) {
-            animation-delay: 0.6s;
-        }
-
-        .input-group:nth-child(2) {
-            animation-delay: 0.7s;
-        }
-
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
         }
 
         .input-group label {
@@ -154,22 +123,11 @@
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
         }
 
-        .forgot-password {
-            text-align: right;
-            margin-bottom: 25px;
-            animation: fadeIn 1s ease-out 0.8s both;
-        }
-
-        .forgot-password a {
-            color: #667eea;
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.3s ease;
-        }
-
-        .forgot-password a:hover {
-            color: #764ba2;
-            text-decoration: underline;
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
         }
 
         .login-btn {
@@ -183,20 +141,8 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            animation: slideInUp 0.6s ease-out 0.9s both;
             position: relative;
             overflow: hidden;
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .login-btn:hover {
@@ -204,185 +150,675 @@
             box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
         }
 
-        .login-btn:active {
-            transform: translateY(-1px);
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
-        .login-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .login-btn:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .signup-link {
-            text-align: center;
-            margin-top: 25px;
-            color: #666;
-            font-size: 14px;
-            animation: fadeIn 1s ease-out 1s both;
-        }
-
-        .signup-link a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
-
-        .signup-link a:hover {
-            color: #764ba2;
-        }
-
-        /* Social login buttons */
-        .social-login {
-            margin-top: 30px;
-            animation: fadeIn 1s ease-out 1.1s both;
-        }
-
-        .divider {
-            text-align: center;
-            margin: 25px 0;
-            position: relative;
-        }
-
-        .divider::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            width: 100%;
-            height: 1px;
-            background: #e0e0e0;
-        }
-
-        .divider span {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 0 15px;
-            color: #999;
-            font-size: 14px;
-            position: relative;
-        }
-
-        .social-buttons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .social-btn {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
+        .demo-credentials {
+            background: #f0f4ff;
+            padding: 15px;
             border-radius: 10px;
-            background: white;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .demo-credentials strong {
+            color: #667eea;
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 260px;
+            height: 100vh;
+            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header h2 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .sidebar-menu {
+            margin-top: 30px;
+        }
+
+        .menu-item {
+            padding: 15px 20px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 14px;
-            font-weight: 500;
+            gap: 15px;
+            border-left: 3px solid transparent;
         }
 
-        .social-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        .menu-item:hover {
+            background: rgba(255,255,255,0.1);
+            border-left-color: #667eea;
+        }
+
+        .menu-item.active {
+            background: rgba(102, 126, 234, 0.2);
+            border-left-color: #667eea;
+        }
+
+        .menu-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            outline: none;
             border-color: #667eea;
         }
 
-        /* Loading animation */
-        @keyframes spin {
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            padding: 10px 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
             to {
-                transform: rotate(360deg);
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        .loading {
+        .stat-card h3 {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .stat-change {
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stat-change.positive {
+            color: #27ae60;
+        }
+
+        .stat-change.negative {
+            color: #e74c3c;
+        }
+
+        /* Inventory Table */
+        .inventory-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-header h2 {
+            font-size: 24px;
+            color: #2c3e50;
+        }
+
+        .add-btn {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #555;
+        }
+
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-in-stock {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-low-stock {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-out-of-stock {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-edit, .btn-delete {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #2980b9;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+        }
+
+        /* Modal */
+        .modal {
             display: none;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .modal-header {
+            margin-bottom: 30px;
+        }
+
+        .modal-header h2 {
+            color: #2c3e50;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 12px;
+            background: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+            background: #7f8c8d;
+        }
+
+        .btn-save {
+            flex: 1;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                padding: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Animated background particles -->
-    <div class="particles" id="particles"></div>
-
-    <!-- Login container -->
-    <div class="login-container">
-        <div class="login-header">
-            <h1>Welcome Back</h1>
-            <p>Please login to your account</p>
-        </div>
-
-        <form id="loginForm">
-            <div class="input-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" placeholder="Enter your email" required>
+    <!-- Login Page -->
+    <div class="login-page" id="loginPage">
+        <div class="particles" id="particles"></div>
+        <div class="login-container">
+            <div class="login-header">
+                <h1>Welcome Back</h1>
+                <p>Login to access your inventory dashboard</p>
             </div>
 
-            <div class="input-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter your password" required>
-            </div>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="Enter your email" required>
+                    <div class="error-message" id="emailError">Invalid email address</div>
+                </div>
 
-            <div class="forgot-password">
-                <a href="#">Forgot Password?</a>
-            </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                    <div class="error-message" id="passwordError">Invalid password</div>
+                </div>
 
-            <button type="submit" class="login-btn">
-                <span id="btnText">Login</span>
-                <div class="loading" id="loading"></div>
-            </button>
-        </form>
+                <button type="submit" class="login-btn" id="loginBtn">Login</button>
+            </form>
 
-        <div class="social-login">
-            <div class="divider">
-                <span>Or continue with</span>
-            </div>
-            <div class="social-buttons">
-                <button class="social-btn" onclick="socialLogin('google')">
-                    <svg width="20" height="20" viewBox="0 0 24 24">
-                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                    </svg>
-                    Google
-                </button>
-                <button class="social-btn" onclick="socialLogin('github')">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#333">
-                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                    </svg>
-                    GitHub
-                </button>
+            <div class="demo-credentials">
+                <strong>Demo Credentials:</strong><br>
+                Email: admin@inventory.com<br>
+                Password: admin123
             </div>
         </div>
+    </div>
 
-        <div class="signup-link">
-            Don't have an account? <a href="#">Sign up</a>
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>📦 Inventory</h2>
+                <p>Management System</p>
+            </div>
+            <div class="sidebar-menu">
+                <div class="menu-item active">
+                    <span class="menu-icon">📊</span>
+                    <span>Dashboard</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-icon">📦</span>
+                    <span>Products</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-icon">📈</span>
+                    <span>Analytics</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-icon">⚙️</span>
+                    <span>Settings</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search products..." id="searchInput">
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">A</div>
+                    <span id="userName">Admin User</span>
+                    <button class="logout-btn" id="logoutBtn">Logout</button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Products</h3>
+                    <div class="stat-value" id="totalProducts">0</div>
+                    <div class="stat-change positive">
+                        <span>↑ 12%</span>
+                        <span>from last month</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Value</h3>
+                    <div class="stat-value" id="totalValue">$0</div>
+                    <div class="stat-change positive">
+                        <span>↑ 8%</span>
+                        <span>from last month</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>Low Stock Items</h3>
+                    <div class="stat-value" id="lowStock">0</div>
+                    <div class="stat-change negative">
+                        <span>↓ 3</span>
+                        <span>items need restock</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>Out of Stock</h3>
+                    <div class="stat-value" id="outOfStock">0</div>
+                    <div class="stat-change negative">
+                        <span>↑ 2</span>
+                        <span>urgent attention</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventory Table -->
+            <div class="inventory-section">
+                <div class="section-header">
+                    <h2>Inventory List</h2>
+                    <button class="add-btn" id="addProductBtn">+ Add Product</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product ID</th>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTableBody">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Product</h2>
+            </div>
+            <form id="productForm">
+                <div class="form-group">
+                    <label for="productName">Product Name</label>
+                    <input type="text" id="productName" required>
+                </div>
+                <div class="form-group">
+                    <label for="productCategory">Category</label>
+                    <select id="productCategory" required>
+                        <option value="">Select Category</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Clothing">Clothing</option>
+                        <option value="Food">Food</option>
+                        <option value="Furniture">Furniture</option>
+                        <option value="Books">Books</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="productQuantity">Quantity</label>
+                    <input type="number" id="productQuantity" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="productPrice">Price ($)</label>
+                    <input type="number" id="productPrice" min="0" step="0.01" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn-save">Save Product</button>
+                </div>
+            </form>
         </div>
     </div>
 
     <script>
-        // Create animated particles
+        // Sample inventory data
+        let inventory = [
+            { id: 'PRD001', name: 'Laptop Dell XPS 15', category: 'Electronics', quantity: 45, price: 1299.99 },
+            { id: 'PRD002', name: 'iPhone 14 Pro', category: 'Electronics', quantity: 8, price: 999.99 },
+            { id: 'PRD003', name: 'Nike Air Max', category: 'Clothing', quantity: 120, price: 149.99 },
+            { id: 'PRD004', name: 'Office Chair', category: 'Furniture', quantity: 0, price: 299.99 },
+            { id: 'PRD005', name: 'Wireless Mouse', category: 'Electronics', quantity: 200, price: 29.99 },
+            { id: 'PRD006', name: 'Coffee Beans 1kg', category: 'Food', quantity: 15, price: 24.99 },
+            { id: 'PRD007', name: 'Standing Desk', category: 'Furniture', quantity: 32, price: 499.99 },
+            { id: 'PRD008', name: 'Programming Book', category: 'Books', quantity: 5, price: 49.99 }
+        ];
+
+        let editingProductId = null;
+
+        // Create particles
         const particlesContainer = document.getElementById('particles');
         for (let i = 0; i < 50; i++) {
             const particle = document.createElement('div');
@@ -395,40 +831,159 @@
             particlesContainer.appendChild(particle);
         }
 
-        // Form submission with animation
+        // Login functionality
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const btnText = document.getElementById('btnText');
-            const loading = document.getElementById('loading');
-            const loginBtn = document.querySelector('.login-btn');
-            
-            btnText.style.display = 'none';
-            loading.style.display = 'block';
-            loginBtn.style.pointerEvents = 'none';
-            
-            // Simulate login process
-            setTimeout(() => {
-                btnText.style.display = 'inline';
-                loading.style.display = 'none';
-                loginBtn.style.pointerEvents = 'auto';
-                alert('Login successful! (This is a demo)');
-            }, 2000);
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (email === 'admin@inventory.com' && password === 'admin123') {
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('dashboard').classList.add('active');
+                loadDashboard();
+            } else {
+                document.getElementById('emailError').style.display = 'block';
+                document.getElementById('passwordError').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('emailError').style.display = 'none';
+                    document.getElementById('passwordError').style.display = 'none';
+                }, 3000);
+            }
         });
 
-        // Social login function
-        function socialLogin(provider) {
-            alert(`Logging in with ${provider}... (This is a demo)`);
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+        });
+
+        // Load dashboard data
+        function loadDashboard() {
+            updateStats();
+            renderInventoryTable();
         }
 
-        // Add floating animation to inputs
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.style.transform = 'scale(1.02)';
+        // Update statistics
+        function updateStats() {
+            const totalProducts = inventory.length;
+            const totalValue = inventory.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+            const lowStock = inventory.filter(item => item.quantity > 0 && item.quantity <= 10).length;
+            const outOfStock = inventory.filter(item => item.quantity === 0).length;
+
+            document.getElementById('totalProducts').textContent = totalProducts;
+            document.getElementById('totalValue').textContent = '$' + totalValue.toLocaleString('en-US', {minimumFractionDigits: 2});
+            document.getElementById('lowStock').textContent = lowStock;
+            document.getElementById('outOfStock').textContent = outOfStock;
+        }
+
+        // Render inventory table
+        function renderInventoryTable(filter = '') {
+            const tbody = document.getElementById('inventoryTableBody');
+            tbody.innerHTML = '';
+
+            const filteredInventory = inventory.filter(item => 
+                item.name.toLowerCase().includes(filter.toLowerCase()) ||
+                item.category.toLowerCase().includes(filter.toLowerCase()) ||
+                item.id.toLowerCase().includes(filter.toLowerCase())
+            );
+
+            filteredInventory.forEach(item => {
+                const status = item.quantity === 0 ? 'out-of-stock' : 
+                              item.quantity <= 10 ? 'low-stock' : 'in-stock';
+                const statusText = item.quantity === 0 ? 'Out of Stock' : 
+                                  item.quantity <= 10 ? 'Low Stock' : 'In Stock';
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.category}</td>
+                    <td>${item.quantity}</td>
+                    <td>$${item.price.toFixed(2)}</td>
+                    <td><span class="status-badge status-${status}">${statusText}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-edit" onclick="editProduct('${item.id}')">Edit</button>
+                            <button class="btn-delete" onclick="deleteProduct('${item.id}')">Delete</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
             });
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            renderInventoryTable(e.target.value);
+        });
+
+        // Add product button
+        document.getElementById('addProductBtn').addEventListener('click', function() {
+            editingProductId = null;
+            document.getElementById('modalTitle').textContent = 'Add New Product';
+            document.getElementById('productForm').reset();
+            document.getElementById('productModal').classList.add('active');
+        });
+
+        // Cancel button
+        document.getElementById('cancelBtn').addEventListener('click', function() {
+            document.getElementById('productModal').classList.remove('active');
+        });
+
+        // Product form submission
+        document.getElementById('productForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const productData = {
+                id: editingProductId || 'PRD' + String(inventory.length + 1).padStart(3, '0'),
+                name: document.getElementById('productName').value,
+                category: document.getElementById('productCategory').value,
+                quantity: parseInt(document.getElementById('productQuantity').value),
+                price: parseFloat(document.getElementById('productPrice').value)
+            };
+
+            if (editingProductId) {
+                const index = inventory.findIndex(item => item.id === editingProductId);
+                inventory[index] = productData;
+            } else {
+                inventory.push(productData);
+            }
+
+            document.getElementById('productModal').classList.remove('active');
+            updateStats();
+            renderInventoryTable();
+        });
+
+        // Edit product
+        function editProduct(id) {
+            editingProductId = id;
+            const product = inventory.find(item => item.id === id);
             
-            input.addEventListener('blur', function() {
-                this.parentElement.style.transform = 'scale(1)';
-            });
+            document.getElementById('modalTitle').textContent = 'Edit Product';
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productCategory').value = product.category;
+            document.getElementById('productQuantity').value = product.quantity;
+            document.getElementById('productPrice').value = product.price;
+            
+            document.getElementById('productModal').classList.add('active');
+        }
+
+        // Delete product
+        function deleteProduct(id) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                inventory = inventory.filter(item => item.id !== id);
+                updateStats();
+                renderInventoryTable();
+            }
+        }
+
+        // Close modal on outside click
+        document.getElementById('productModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+            }
         });
     </script>
 </body>
